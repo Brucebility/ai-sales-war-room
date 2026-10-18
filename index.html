@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 销售作战室 | Sales War Room v2</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">AI</div>
+    <div class="h-title">AI 销售作战室 <span>Sales War Room</span></div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <div class="dot-live"></div>
+      <span>Agent 在线</span>
+    </div>
+    <span id="clock">--:--:--</span>
+  </div>
+</div>
+
+<div class="app">
+  <!-- ===== Module 6: Agent Fact KB Sidebar ===== -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span> Agent 事实知识库</span>
+      <span class="badge">Module 6</span>
+    </div>
+
+    <!-- Source 1: Customer Profile -->
+    <div class="fact-source open" id="src-customer">
+      <div class="fact-source-head" onclick="toggleSource(this)">
+        <div class="title"><span>📁</span> 客户档案库</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="count">1条</span>
+          <span class="arrow">▼</span>
+        </div>
+      </div>
+      <div class="fact-source-body">
+        <div class="fact-item" id="fact-customer-a">
+          <div class="fi-label">客户名称</div>
+          <div class="fi-value">锐捷科技</div>
+          <span class="fi-tag" style="background:var(--glow-o);color:var(--orange);">高意向</span>
+        </div>
+        <div class="fact-item">
+          <div class="fi-label">预算范围</div>
+          <div class="fi-value green">30-50万（已审批）</div>
+        </div>
+        <div class="fact-item">
+          <div class="fi-label">期望上线时间</div>
+          <div class="fi-value orange">2个月内</div>
+        </div>
+        <div class="fact-item">
+          <div class="fi-label">核心关注点</div>
+          <div class="fi-value">准确率、知识库接入、实施周期</div>
+        </div>
+        <div class="fact-item">
+          <div class="fi-label">对接人</div>
+          <div class="fi-value">王总（采购总监）</div>
+        </div>
+        <div class="fact-item">
+          <div class="fi-label">技术评估会</div>
+          <div class="fi-value green">客户愿安排客服负责人+IT负责人参会</div>
+        </div>
+        <div class="fact-item">
+          <div class="fi-label">客户编号</div>
+          <div class="fi-value" style="font-size:10px;color:var(--text-3)">CRM-2024-0817-A</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Source 2: Historical Cases -->
+    <div class="fact-source" id="src-cases">
+      <div class="fact-source-head" onclick="toggleSource(this)">
+        <div class="title"><span>📚</span> 历史客户案例库</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="count">3条</span>
+          <span class="arrow">▼</span>
+        </div>
+      </div>
+      <div class="fact-source-body">
+        <div class="fact-item" id="fact-case-b">
+          <div class="fi-label">客户B · 智联云</div>
+          <div class="fi-value red">Demo 失败 → 丢单</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">知识库准确率 61%，AI回答多次出错，客户当场失去信心。预算40万。</div>
+          <span class="fi-tag" style="background:var(--glow-r);color:var(--red);">数据质量差</span>
+        </div>
+        <div class="fact-item" id="fact-case-c">
+          <div class="fi-label">客户C · 云途科技</div>
+          <div class="fi-value red">Demo 失败 → 丢单</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">知识库未做数据清洗，Demo出现幻觉回答，IT负责人质疑技术能力。预算35万。</div>
+          <span class="fi-tag" style="background:var(--glow-r);color:var(--red);">数据质量差</span>
+        </div>
+        <div class="fact-item" id="fact-case-d">
+          <div class="fi-label">客户D · 启明信息</div>
+          <div class="fi-value green">Demo 成功 → 签约</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">Demo前做了3天数据审计，准确率89%，Demo表现优秀。预算45万，上线2.5个月。</div>
+          <span class="fi-tag" style="background:var(--glow-g);color:var(--green);">数据质量良好</span>
+        </div>
+        <div class="fact-item" id="fact-pattern">
+          <div class="fi-label">AI 模式识别</div>
+          <div class="fi-value" style="font-size:10px;">成功案例共同特征：Demo前完成数据审计（准确率≥85%）。失败案例共同特征：未做数据前置评估。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Source 3: Internal Resources -->
+    <div class="fact-source" id="src-resources">
+      <div class="fact-source-head" onclick="toggleSource(this)">
+        <div class="title"><span>⚙️</span> 内部资源池</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="count">2条</span>
+          <span class="arrow">▼</span>
+        </div>
+      </div>
+      <div class="fact-source-body">
+        <div class="fact-item" id="fact-demo-slots">
+          <div class="fi-label">售前Demo名额（下周）</div>
+          <div class="fi-value orange">2 / 2 场</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">技术团队下周仅能支持2场售前Demo</div>
+        </div>
+        <div class="fact-item" id="fact-tech-capacity">
+          <div class="fi-label">技术团队排期</div>
+          <div class="fi-value">数据审计需3-5个工作日</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">含数据质量评估、清洗、模型调优测试</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Source 4: KPI Targets -->
+    <div class="fact-source" id="src-kpi">
+      <div class="fact-source-head" onclick="toggleSource(this)">
+        <div class="title"><span>🎯</span> KPI 目标库</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="count">2条</span>
+          <span class="arrow">▼</span>
+        </div>
+      </div>
+      <div class="fact-source-body">
+        <div class="fact-item" id="fact-kpi-target">
+          <div class="fi-label">本月销售目标</div>
+          <div class="fi-value orange">推进 5 个高意向客户</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">A客户是5个目标之一，转化概率最高</div>
+        </div>
+        <div class="fact-item" id="fact-kpi-revenue">
+          <div class="fi-label">季度签约目标</div>
+          <div class="fi-value">150万</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">A客户预算30-50万占20-33%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent capabilities summary -->
+    <div style="padding:12px 16px;border-top:1px solid var(--border);font-size:10px;color:var(--text-3);line-height:1.6;">
+      <div style="font-weight:600;color:var(--cyan);margin-bottom:4px;font-size:11px;">Agent 能力清单</div>
+      ✓ 风险推演<br>
+      ✓ 历史案例检索<br>
+      ✓ 资源冲突校验<br>
+      ✓ 决策建议生成<br>
+      ✓ 行动任务拆解<br>
+      ✓ 角色权限视图<br>
+      ✓ 风险预警
+    </div>
+  </div>
+
+  <!-- ===== Main Content ===== -->
+  <div class="main">
+
+    <!-- Risk Warning Bar -->
+    <div class="risk-bar">
+      <span class="icon">⚠️</span>
+      <div class="text">
+        <b>风险预警：</b>AI Agent 检测到 3 项关键风险 —— ① 知识库数据质量未评估（阻塞项） ② 2/3 类似客户 Demo 失败（67%失败率） ③ Demo 名额仅剩 2 个（资源瓶颈）。建议在安排 Demo 前完成数据审计。
+      </div>
+    </div>
+
+    <!-- ===== Flow Chart (Module 0) ===== -->
+    <div class="flow-section">
+      <div class="flow-section-title"><span class="num">0</span> Agent 工作流程总览</div>
+      <div class="flow-chart">
+        <div class="fc-title">AI 销售作战室 · Agent 工作流程</div>
+        <svg viewBox="0 0 720 530" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="fc-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+              <path d="M1 1 L7 4 L1 7 Z" fill="var(--text-3)" />
+            </marker>
+          </defs>
+          <g class="fc-neutral">
+            <rect x="180" y="44" width="360" height="60" rx="8" />
+            <text class="fc-th" x="360" y="68" text-anchor="middle">事实知识库 · Module 6</text>
+            <text class="fc-ts" x="360" y="88" text-anchor="middle">客户档案 · 历史案例 · 资源池 · KPI目标</text>
+          </g>
+          <path class="fc-arr" d="M360 108 L360 134" marker-end="url(#fc-arrow)" />
+          <text class="fc-ts" x="372" y="125">数据输入</text>
+          <g class="fc-brand">
+            <rect x="200" y="134" width="320" height="60" rx="8" />
+            <text class="fc-th" x="360" y="158" text-anchor="middle">AI Agent 研判</text>
+            <text class="fc-ts" x="360" y="178" text-anchor="middle">风险推演 · 案例检索 · 资源校验</text>
+          </g>
+          <path class="fc-arr" d="M360 198 L360 224" marker-end="url(#fc-arrow)" />
+          <text class="fc-ts" x="372" y="215">证据链</text>
+          <g class="fc-neutral">
+            <rect x="160" y="224" width="400" height="70" rx="8" />
+            <text class="fc-th" x="360" y="250" text-anchor="middle">冲突共识面板 · Module 2</text>
+            <text class="fc-ts" x="360" y="278" text-anchor="middle"><tspan fill="var(--green)" font-weight="600">销售 GO</tspan><tspan fill="var(--text-3)">  ·  </tspan><tspan fill="var(--orange)" font-weight="600">主管 CAUTION</tspan><tspan fill="var(--text-3)">  ·  </tspan><tspan fill="var(--red)" font-weight="600">技术 STOP</tspan></text>
+          </g>
+          <path class="fc-arr" d="M360 298 L360 324" marker-end="url(#fc-arrow)" />
+          <text class="fc-ts" x="372" y="315">呈现冲突</text>
+          <g class="fc-brand">
+            <rect x="180" y="324" width="360" height="60" rx="8" />
+            <text class="fc-th" x="360" y="348" text-anchor="middle">AI 决策：条件式推进</text>
+            <text class="fc-ts" x="360" y="368" text-anchor="middle">审计≥85% → 排Demo · &lt;85% → 协商延期</text>
+          </g>
+          <path class="fc-arr" d="M360 388 L360 414" marker-end="url(#fc-arrow)" />
+          <text class="fc-ts" x="372" y="405">行动生成</text>
+          <g class="fc-neutral">
+            <rect x="180" y="414" width="360" height="60" rx="8" />
+            <text class="fc-th" x="360" y="438" text-anchor="middle">行动任务流转 · Module 5</text>
+            <text class="fc-ts" x="360" y="458" text-anchor="middle">待分派 → 已分派 → 进行中 → 已完成</text>
+          </g>
+          <g transform="translate(230, 495)">
+            <rect class="fc-brand" x="0" y="0" width="14" height="14" rx="3" />
+            <text class="fc-ts" x="22" y="11">AI 研判/决策</text>
+            <rect class="fc-neutral" x="130" y="0" width="14" height="14" rx="3" />
+            <text class="fc-ts" x="152" y="11">数据/面板/任务</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ===== Module 1: 商机总览工作台 ===== -->
+    <div class="module">
+      <div class="module-label"><span class="num">1</span> 商机总览工作台 <span style="font-size:10px;color:var(--text-3);font-weight:400;">当前聚焦：客户 A 商机</span></div>
+      <div class="intel-card">
+        <div class="intel-top">
+          <div>
+            <span class="intel-name">锐捷科技</span>
+            <span class="intel-tag tag-high">高意向 · 待决策</span>
+            <div class="intel-meta">CRM-2024-0817-A | 企业服务 | 对接人：王总（采购总监）</div>
+          </div>
+          <div class="intel-metrics">
+            <div class="metric"><div class="metric-val m-green">30-50万</div><div class="metric-lbl">预算范围</div></div>
+            <div class="metric"><div class="metric-val m-orange">2个月</div><div class="metric-lbl">期望上线</div></div>
+            <div class="metric"><div class="metric-val m-red">高风险</div><div class="metric-lbl">AI风险评估</div></div>
+            <div class="metric"><div class="metric-val m-blue">2/5</div><div class="metric-lbl">KPI占用</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Module 2: 冲突共识面板 ===== -->
+    <div class="module">
+      <div class="module-label"><span class="num">2</span> 冲突共识面板 <span class="core">核心模块</span></div>
+      <div class="conflict-grid">
+        <div>
+          <!-- Sales -->
+          <div class="persp-card exp" id="persp-sales" onclick="togglePersp(this)" style="margin-bottom:10px;">
+            <div class="persp-head">
+              <div class="persp-role"><div class="d" style="background:var(--cyan)"></div> 销售 · 李明</div>
+              <span class="stance s-go">推进 GO</span>
+              <span class="arrow-sm">▼</span>
+            </div>
+            <div class="persp-body">
+              <div class="concern"><div class="ci" style="background:var(--glow-g);color:var(--green)">✓</div><div class="ct"><b>预算明确：</b>30-50万已审批，高价值客户</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-g);color:var(--green)">✓</div><div class="ct"><b>时间紧迫：</b>2个月内上线，犹豫期窗口短</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-g);color:var(--green)">✓</div><div class="ct"><b>配合度高：</b>愿安排客服+IT负责人参会</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-o);color:var(--orange)">!</div><div class="ct"><b>目标压力：</b>本月需推进5个高意向客户</div></div>
+            </div>
+          </div>
+          <!-- Supervisor -->
+          <div class="persp-card exp" id="persp-supervisor" onclick="togglePersp(this)" style="margin-bottom:10px;">
+            <div class="persp-head">
+              <div class="persp-role"><div class="d" style="background:var(--orange)"></div> 主管 · 张华</div>
+              <span class="stance s-caution">谨慎 CAUTION</span>
+              <span class="arrow-sm">▼</span>
+            </div>
+            <div class="persp-body">
+              <div class="concern"><div class="ci" style="background:var(--glow-r);color:var(--red)">!</div><div class="ct"><b>准确率敏感：</b>客户特别关注AI准确率，Demo不好直接丢单</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-r);color:var(--red)">!</div><div class="ct"><b>失败率高：</b>3个类似客户中2个因数据质量差失败</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-o);color:var(--orange)">!</div><div class="ct"><b>资源稀缺：</b>仅2个Demo名额，必须用在最有把握的客户</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-o);color:var(--orange)">!</div><div class="ct"><b>品牌风险：</b>丢单影响行业口碑和后续获客</div></div>
+            </div>
+          </div>
+          <!-- Tech -->
+          <div class="persp-card exp" id="persp-tech" onclick="togglePersp(this)">
+            <div class="persp-head">
+              <div class="persp-role"><div class="d" style="background:var(--purple)"></div> 技术负责人 · 陈工</div>
+              <span class="stance s-stop">暂缓 STOP</span>
+              <span class="arrow-sm">▼</span>
+            </div>
+            <div class="persp-body">
+              <div class="concern"><div class="ci" style="background:var(--glow-r);color:var(--red)">✕</div><div class="ct"><b>数据未知：</b>知识库数据质量未评估，无法预估准确率</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-r);color:var(--red)">✕</div><div class="ct"><b>承诺困难：</b>2个月上线需先评估→清洗→调优→测试，周期不确定</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-o);color:var(--orange)">!</div><div class="ct"><b>建议前置：</b>先花3-5天做数据质量审计再决定</div></div>
+              <div class="concern"><div class="ci" style="background:var(--glow-g);color:var(--green)">✓</div><div class="ct"><b>有利条件：</b>客户IT负责人愿参会，可加速评估</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conflict Matrix -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title"><span>⚡</span> 冲突矩阵</div>
+            <span style="font-size:10px;color:var(--orange);font-weight:600;">3项冲突</span>
+          </div>
+          <div class="card-body" style="padding:0">
+            <table class="conflict-table">
+              <thead><tr><th>决策项</th><th>销售</th><th>主管</th><th>技术</th></tr></thead>
+              <tbody>
+                <tr><td><b>立即安排Demo</b></td><td><span class="tag-xs s-go">赞成</span></td><td><span class="tag-xs s-caution">反对</span></td><td><span class="tag-xs s-stop">反对</span></td></tr>
+                <tr><td><b>承诺2月上线</b></td><td><span class="tag-xs s-go">赞成</span></td><td><span class="tag-xs s-caution">观望</span></td><td><span class="tag-xs s-stop">反对</span></td></tr>
+                <tr><td><b>优先投入资源</b></td><td><span class="tag-xs s-go">赞成</span></td><td><span class="tag-xs s-caution">谨慎</span></td><td><span class="tag-xs s-caution">谨慎</span></td></tr>
+                <tr><td><b>先评估数据</b></td><td><span class="tag-xs s-caution">可接受</span></td><td><span class="tag-xs s-go">赞成</span></td><td><span class="tag-xs s-go">赞成</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:10px 14px;font-size:10px;color:var(--text-3);line-height:1.5;border-top:1px solid var(--border)">
+            <b style="color:var(--orange)">AI共识检测：</b>三方在"先评估数据"上达成共识。冲突集中在"是否立即安排Demo"和"是否承诺2个月上线"。AI建议以数据评估为前置条件，化解冲突。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Module 3: AI 智能研判 ===== -->
+    <div class="module">
+      <div class="module-label"><span class="num">3</span> AI 智能研判模块 <span style="font-size:10px;color:var(--text-3);font-weight:400;">结论 + 证据链，点击证据可回溯原始数据</span></div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title"><span>🧠</span> AI 综合分析</div>
+          <span class="ai-badge">AI AGENT</span>
+        </div>
+        <div class="card-body">
+          <!-- Scores -->
+          <div class="ai-scores">
+            <div class="score-box"><div class="score-lbl">客户价值</div><div class="score-val" style="color:var(--green)">85</div><div class="score-bar"><div class="score-fill" style="width:85%;background:var(--green)"></div></div></div>
+            <div class="score-box"><div class="score-lbl">落地风险</div><div class="score-val" style="color:var(--red)">72</div><div class="score-bar"><div class="score-fill" style="width:72%;background:var(--red)"></div></div></div>
+            <div class="score-box"><div class="score-lbl">签约概率</div><div class="score-val" style="color:var(--orange)">45</div><div class="score-bar"><div class="score-fill" style="width:45%;background:var(--orange)"></div></div></div>
+          </div>
+
+          <div style="font-size:12px;font-weight:600;color:var(--cyan);margin-bottom:8px">🔗 证据链 · AI推理过程（点击来源可跳转事实源）</div>
+
+          <div class="evidence-chain">
+            <div class="ev-node">
+              <div class="ev-title">证据1：客户预算已审批</div>
+              <div class="ev-desc">A客户预算30-50万已通过内部审批，中等偏上规模，具备签约价值。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-customer','fact-customer-a')"><span>📁</span> 客户档案库 · CRM-2024-0817-A <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node warning">
+              <div class="ev-title">证据2：2/3 类似客户Demo失败</div>
+              <div class="ev-desc">3个类似客户中，2个因知识库数据质量差导致Demo翻车丢单，失败率67%。这是当前最大风险信号。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-cases','fact-case-b')"><span>📚</span> 历史案例库 · 客户B/C/D <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node warning">
+              <div class="ev-title">证据3：客户对准确率高度敏感</div>
+              <div class="ev-desc">客户明确将"准确率"列为第一关注点。结合证据2，若数据质量不足，Demo翻车概率极高。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-customer','fact-customer-a')"><span>📁</span> 客户档案库 · 核心关注点 <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node">
+              <div class="ev-title">证据4：知识库数据质量未评估</div>
+              <div class="ev-desc">技术负责人指出知识库数据质量未知，无法承诺2个月上线。这是阻塞项，必须先解决。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-resources','fact-tech-capacity')"><span>⚙️</span> 内部资源池 · 技术团队排期 <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node">
+              <div class="ev-title">证据5：客户配合意愿高</div>
+              <div class="ev-desc">客户愿安排客服负责人和IT负责人参加技术评估会，配合度高，有利于快速完成数据质量评估。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-customer','fact-customer-a')"><span>📁</span> 客户档案库 · 技术评估会 <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node">
+              <div class="ev-title">证据6：Demo名额仅剩2个</div>
+              <div class="ev-desc">技术团队下周仅能支持2场售前Demo。本月需推进5个高意向客户。资源稀缺，必须用在最有把握的场景。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-resources','fact-demo-slots')"><span>⚙️</span> 内部资源池 · Demo名额 <span class="j">↗</span></div>
+              <div class="ev-source-link" onclick="jumpToFact('src-kpi','fact-kpi-target')"><span>🎯</span> KPI目标库 · 本月目标 <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node danger">
+              <div class="ev-title">⚠ 冲突识别：时间承诺 vs 数据风险</div>
+              <div class="ev-desc">销售希望快速推进（2个月上线），技术认为数据质量未知无法承诺，主管担心Demo翻车。三方在"是否立即安排Demo"上存在直接冲突。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-cases','fact-pattern')"><span>📚</span> 历史案例库 · AI模式识别 <span class="j">↗</span></div>
+            </div>
+            <div class="ev-node conclusion">
+              <div class="ev-title">✓ AI结论：前置数据评估 → 条件式推进</div>
+              <div class="ev-desc">建议不立即安排Demo，先3天内完成知识库数据质量审计。若准确率≥85%则安排Demo并承诺2个月上线；若<85%则与客户协商调整为2.5个月（参考客户D成功案例），避免Demo翻车。</div>
+              <div class="ev-source-link" onclick="jumpToFact('src-cases','fact-case-d')"><span>📚</span> 历史案例库 · 客户D成功案例 <span class="j">↗</span></div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;font-size:12px;font-weight:600;color:var(--cyan);margin-bottom:8px">🤖 Agent 能力（非普通看板）</div>
+          <div class="agent-caps">
+            <div class="cap-item"><div class="cap-icon">🔍</div><div class="cap-name">信息感知</div><div class="cap-desc">自动采集CRM、历史案例、技术评估、KPI数据</div></div>
+            <div class="cap-item"><div class="cap-icon">⚖️</div><div class="cap-name">冲突识别</div><div class="cap-desc">识别多方立场冲突，不掩盖分歧</div></div>
+            <div class="cap-item"><div class="cap-icon">🔗</div><div class="cap-name">证据推理</div><div class="cap-desc">每个判断附带证据链，可回溯事实源</div></div>
+            <div class="cap-item"><div class="cap-icon">📋</div><div class="cap-name">行动生成</div><div class="cap-desc">自动生成决策建议和可分派行动项</div></div>
+            <div class="cap-item"><div class="cap-icon">⚠️</div><div class="cap-name">风险预警</div><div class="cap-desc">实时检测风险信号并主动推送</div></div>
+            <div class="cap-item"><div class="cap-icon">🔄</div><div class="cap-name">任务流转</div><div class="cap-desc">行动项可分派给不同角色，支持状态流转</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Module 4: 角色视图切换器 ===== -->
+    <div class="module">
+      <div class="module-label"><span class="num">4</span> 角色视图切换器 <span style="font-size:10px;color:var(--text-3);font-weight:400;">不同角色看到自己关心的信息</span></div>
+      <div class="role-bar">
+        <button class="role-btn active" data-role="overview" onclick="switchRole('overview')"><div class="d" style="background:var(--indigo)"></div> 全局作战视图</button>
+        <button class="role-btn" data-role="sales" onclick="switchRole('sales')"><div class="d" style="background:var(--cyan)"></div> 销售视角</button>
+        <button class="role-btn" data-role="supervisor" onclick="switchRole('supervisor')"><div class="d" style="background:var(--orange)"></div> 主管视角</button>
+        <button class="role-btn" data-role="tech" onclick="switchRole('tech')"><div class="d" style="background:var(--purple)"></div> 技术负责人视角</button>
+      </div>
+      <div class="role-focus" id="role-focus">
+        <div class="rf-item"><div class="rf-dot" style="background:var(--red)"></div><div><b>核心冲突：</b>是否立即安排Demo — 销售赞成，主管和技术反对</div></div>
+        <div class="rf-item"><div class="rf-dot" style="background:var(--orange)"></div><div><b>关键瓶颈：</b>知识库数据质量未知 — 技术负责人阻塞项</div></div>
+        <div class="rf-item"><div class="rf-dot" style="background:var(--green)"></div><div><b>共识方向：</b>先评估数据再决策 — 三方在此达成一致</div></div>
+        <div class="rf-item"><div class="rf-dot" style="background:var(--blue)"></div><div><b>AI建议：</b>3天数据审计 → 条件式推进（准确率≥85%排Demo）</div></div>
+      </div>
+    </div>
+
+    <!-- ===== Module 5: 决策与下一步行动 ===== -->
+    <div class="module">
+      <div class="module-label"><span class="num">5</span> 决策与下一步行动模块 <span style="font-size:10px;color:var(--text-3);font-weight:400;">可分派待办任务，支持流转</span></div>
+      <div class="decision-panel">
+        <div class="decision-head">
+          <div class="decision-title"><span style="font-size:18px">📋</span> AI 决策推荐 <span class="ai-badge">AI AGENT</span></div>
+          <div class="conf-badge">综合置信度 82%</div>
+        </div>
+        <div class="decision-body">
+          <div class="reco-box">
+            <div class="reco-head">
+              <div class="reco-icon">✓</div>
+              <div class="reco-title">推荐策略：前置数据评估 → 条件式推进</div>
+            </div>
+            <div class="reco-desc">
+              AI综合三方立场、历史案例和资源约束，建议：<b>不立即安排Demo</b>，3天内完成知识库数据质量审计。准确率≥85%则安排Demo并承诺2个月上线；<85%则协商2.5个月（参考客户D）。此策略在<b>尊重销售推进诉求</b>的同时<b>回应主管风控要求</b>和<b>技术可行性</b>，将冲突转化为行动路径。
+            </div>
+          </div>
+
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--cyan)">📌 行动项（可分派 · 可流转）</div>
+          <div class="action-list" id="action-list">
+            <!-- Action items rendered by JS -->
+          </div>
+
+          <div class="decision-summary">
+            <div class="ds-title">🎯 下一步明确决策</div>
+            <div class="ds-text">
+              <b style="color:var(--text)">本周决策：</b>3天数据审计 → 第4天技术评估会 → 基于结果决定Demo排期<br>
+              <b style="color:var(--text)">本月目标：</b>A客户转入"条件推进"状态，释放Demo资源给其余4个高意向客户，确保5个目标不受阻<br>
+              <b style="color:var(--green)">冲突化解：</b>销售获得推进路径（非否决）、主管获得风控前置（数据审计）、技术获得评估时间（不盲目承诺）
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
