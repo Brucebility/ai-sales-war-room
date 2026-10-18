@@ -1,6 +1,18 @@
 # AI 销售作战室 | Sales War Room
 
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Online Demo](https://img.shields.io/badge/Demo-Live%20Preview-2ea44f?style=flat-square&logo=githubpages&logoColor=white)
+
+
 > AI Native 产品经理实测试题 Demo — 企业级 AI Agent 雏形
+
+## 在线预览
+
+**https://brucebility.github.io/ai-sales-war-room/** — 浏览器直接打开，无需下载、无需构建。
+
+![界面预览](docs/preview.png)
 
 ## 项目简介
 
@@ -16,6 +28,9 @@ ai-sales-war-room/
 ├── js/
 │   ├── data.js         # Mock 数据层（客户/案例/资源/KPI/行动项）
 │   └── app.js          # 应用逻辑（时钟/事实源切换/证据跳转/角色切换/任务流转）
+├── docs/
+│   └── preview.png     # 界面预览截图
+├── LICENSE
 └── README.md           # 本文档
 ```
 
